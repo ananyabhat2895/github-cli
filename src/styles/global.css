@@ -1,1 +1,48 @@
 @import "tailwindcss";
+
+@custom-variant high-contrast (&:where(.high-contrast, .high-contrast *));
+
+html.high-contrast {
+    color-scheme: dark;
+}
+
+html.high-contrast body {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+html.high-contrast header,
+html.high-contrast nav,
+html.high-contrast [data-testid="game-card"],
+html.high-contrast [data-testid="about-section"],
+html.high-contrast [data-testid="not-found"] {
+    background: #000 !important;
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
+html.high-contrast a,
+html.high-contrast button {
+    color: #ffff00 !important;
+}
+
+html.high-contrast a:hover,
+html.high-contrast button:hover,
+html.high-contrast a:focus-visible,
+html.high-contrast button:focus-visible {
+    background-color: #222 !important;
+    color: #fff !important;
+}
+
+html.high-contrast p,
+html.high-contrast h1,
+html.high-contrast h2,
+html.high-contrast h3,
+html.high-contrast span {
+    color: #fff !important;
+}
+
+html.high-contrast :focus-visible {
+    outline: 3px solid #00ffff !important;
+    outline-offset: 2px;
+}

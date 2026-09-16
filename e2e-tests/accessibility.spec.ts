@@ -13,6 +13,30 @@ test.describe('Accessibility Tests', () => {
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
+  test('high contrast mode can be toggled and persists across reloads', async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(() => localStorage.removeItem('tailspin-high-contrast'));
+    await page.reload();
+
+    const toggle = page.getByTestId('high-contrast-toggle');
+    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    await expect(toggle).toHaveAttribute('aria-label', 'Enable high contrast mode');
+
+    await toggle.click();
+    await expect(page.locator('html')).toHaveClass(/high-contrast/);
+    await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+    await expect(toggle).toHaveAttribute('aria-label', 'Disable high contrast mode');
+    await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+
+    await page.reload();
+    await expect(page.locator('html')).toHaveClass(/high-contrast/);
+    await expect(page.getByTestId('high-contrast-toggle')).toHaveAttribute('aria-pressed', 'true');
+
+    await page.getByTestId('high-contrast-toggle').click();
+    await expect(page.locator('html')).not.toHaveClass(/high-contrast/);
+    await expect(page.getByTestId('high-contrast-toggle')).toHaveAttribute('aria-pressed', 'false');
+  });
+
   test('game details page should not have accessibility violations', async ({ page }) => {
     await page.goto('/game/1');
     await page.waitForSelector('[data-testid="game-details"]', { timeout: 10000 });
